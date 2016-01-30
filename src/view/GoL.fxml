@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.GoLController">
+   <children>
+      <Canvas fx:id="gridcanvas" height="560.0" width="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <ButtonBar layoutX="50.0" layoutY="127.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <buttons>
+          <Button fx:id="testbutton" mnemonicParsing="false" onMouseClicked="#handleSubmitButtonAction" text="Start/Stop" />
+            <Button mnemonicParsing="false" text="Reset" />
+            <Button layoutX="535.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleStepButton" text="Step" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Speed:" />
+            <Slider />
+            <Text layoutX="291.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zoom:" />
+            <Slider layoutX="403.0" layoutY="23.0" />
+            <Text layoutX="447.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Generation Nr.:" />
+            <Text fx:id="testtext" layoutX="587.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+        </buttons>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </ButtonBar>
+   </children>
+</AnchorPane>

@@ -12,16 +12,22 @@ import model.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-    // - - - - Branch test - - - -
-    public class GoLController {
+public class GoLController {
 
-    @FXML private Button testbutton;
-    @FXML private Text testtext;
-    @FXML private Canvas gridcanvas;
+    @FXML
+    private Button testbutton;
+    @FXML
+    private Text testtext;
+    @FXML
+    private Canvas gridcanvas;
+
+    private Random r;
 
 
-    @FXML protected void handleSubmitButtonAction(MouseEvent event) {
+    @FXML
+    protected void handleSubmitButtonAction(MouseEvent event) {
         if (testtext.getText() == "Test") {
             testtext.setText("Not");
         } else {
@@ -30,21 +36,15 @@ import java.util.List;
     }
 
 
-    @FXML protected void handleStepButton(ActionEvent event) {
+    @FXML
+    protected void handleStepButton(ActionEvent event) {
         GraphicsContext gc = gridcanvas.getGraphicsContext2D();
 
+        r = new Random();
 
-        List<Cell> cellList = new ArrayList<Cell>();
+        byte[][] board = new byte[100][100];
 
-        for(int i=0; i<100; i++){
-            cellList.add(new Cell((int)(Math.random() * 100),(int)(Math.    random() * 100)));
-        }
-
-        gc.setFill(Color.YELLOW.brighter());
-
-        for (Cell p : cellList) {
-            gc.fillRect(10*p.getPosX(), 10*p.getPosY(), 10, 10);
-        }
+        draw(gc, board);
 
        /* for (Cell p : cellList) {
             gc.beginPath();
@@ -58,6 +58,34 @@ import java.util.List;
             gc.closePath();
         }*/
 
+    }
+
+    private void draw(GraphicsContext gc, byte[][] board ) {
+        gc.setFill(Color.YELLOW.brighter());
+
+/*        for (byte[] boardY : board) {
+            for (byte boardX : boardY) {
+
+                System.out.println(boardX);
+            }
+        }*/
+
+        for (int y = 0; y<board.length;y++) {
+            for (int x = 0; x<board[y].length;x++) {
+
+                board[y][x] = (byte)(r.nextFloat()+0.1);
+
+                if (board[y][x] == 1) {
+                    drawsquare(gc,x,y);
+                }
+            }
+
+        }
+
+    }
+
+    private void drawsquare(GraphicsContext gc, int x, int y) {
+        gc.fillRect(10 * x, 10 * y, 10, 10);
     }
 
 }

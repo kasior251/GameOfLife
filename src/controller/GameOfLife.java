@@ -33,7 +33,7 @@ public class GameOfLife {
         boolean[][] tempBoard = new boolean[gameBoard.getColumns()][gameBoard.getRows()];
         for (int i = 0; i < gameBoard.getColumns(); i++) {
             for (int j = 0; j < gameBoard.getRows(); j++) {
-                tempBoard[i][j] = rules.nextState(gameBoard.getBoard()[i][j], gameBoard.countNeighbours(i, j));
+                tempBoard[i][j] = rules.nextState(gameBoard.getBoard()[i][j], gameBoard.countNeighbours(j, i));
             }
         }
         gameBoard.setBoard(tempBoard);

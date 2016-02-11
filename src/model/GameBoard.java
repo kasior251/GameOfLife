@@ -11,6 +11,8 @@ public class GameBoard {
         board[1][1] = true;
         board[1][2] = true;
         board[2][2] = true;
+        this.columns = columns;
+        this.rows = rows;
     }
 
     public void setBoard(boolean[][] board) {
@@ -37,7 +39,7 @@ public class GameBoard {
         int count = 0;
         for (int i = x - 1; i <= x + 1; i++) {
             for (int j = y - 1; j <= y + 1; j++) {
-                if (!(i == x && j == y) && (i >= 0) && (i <= columns) && (j >= 0) && (j <= rows)) {
+                if (!(i == x && j == y) && (i >= 0) && (i < columns) && (j >= 0) && (j < rows)) {
                     if (board[i][j]) {
                         count++;
                     }

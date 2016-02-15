@@ -3,6 +3,7 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -11,7 +12,10 @@ import javafx.scene.text.Text;
 import model.GameBoard;
 import model.RuleSet;
 
-public class GameOfLife {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class GameOfLife implements Initializable {
 
     private GameBoard gameBoard;
     private RuleSet rules;
@@ -27,6 +31,11 @@ public class GameOfLife {
         rules = new RuleSet();
         gameBoard = new GameBoard(100, 150);
         cellSize = 10;
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        draw(gridcanvas.getGraphicsContext2D());
     }
 
     public void nextGeneration() {

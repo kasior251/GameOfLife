@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import model.GameBoard;
@@ -23,20 +24,41 @@ public class GameOfLife implements Initializable {
     private boolean isRunning = false;
     private double speed;
     private int cellSize;
+    private AnimationTimer gameLoop;
 
-    @FXML private Button testbutton;
-    @FXML private Text testtext;
-    @FXML private Canvas gridcanvas;
+    @FXML private Button StartStopButton;
+    @FXML private Text GenCounter;
+    @FXML private Canvas GridCanvas;
+    @FXML private Slider SpeedSlider;
 
     public GameOfLife() {
         rules = new RuleSet();
         gameBoard = new GameBoard(100, 150);
         cellSize = 10;
+
+        SpeedSlider.setMax(100);
+        SpeedSlider.setMin(1);
+        SpeedSlider.setValue(100);
+
+        gameLoop = new AnimationTimer() {
+            long lastTimer = System.currentTimeMillis();
+
+            @Override
+            public void handle(long now) {
+                long currentTimer = System.currentTimeMillis();
+
+                if ((currentTimer - lastTimer) > 500L) {
+                    nextGeneration();
+                    lastTimer = currentTimer;
+                }
+            }
+        };
+
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        draw(gridcanvas.getGraphicsContext2D());
+        draw(GridCanvas.getGraphicsContext2D());
     }
 
     public void nextGeneration() {
@@ -47,7 +69,7 @@ public class GameOfLife implements Initializable {
             }
         }
         gameBoard.setBoard(tempBoard);
-        draw(gridcanvas.getGraphicsContext2D());
+        draw(GridCanvas.getGraphicsContext2D());
 
     }
 
@@ -65,25 +87,31 @@ public class GameOfLife implements Initializable {
 
     }
 
+    @FXML protected void handleSpeedSlider(ActionEvent event) {
+        speed = SpeedSlider.getValue();
+    }
+
+
+    @FXML protected void handleResetButton(ActionEvent event) {
+        GridCanvas.getGraphicsContext2D().clearRect(0, 0, gameBoard.getColumns()*cellSize, gameBoard.getRows()*cellSize);
+        boolean[][] tempBoard = new boolean[gameBoard.getColumns()][gameBoard.getRows()];
+        gameBoard.setBoard(tempBoard);
+    }
 
     @FXML protected void handleStepButton(ActionEvent event) {
         nextGeneration();
     }
 
     @FXML protected void handleToggleStartButton(ActionEvent event) {
-        new AnimationTimer() {
-            long lastTimer = System.currentTimeMillis();
-
-            @Override
-            public void handle(long now) {
-                long currentTimer = System.currentTimeMillis();
-
-                if ((currentTimer - lastTimer) > 500L) {
-                    nextGeneration();
-                    lastTimer = currentTimer;
-                }
-            }
-        }.start();
+        if (isRunning) {
+            StartStopButton.setText("▶");
+            isRunning = false;
+            gameLoop.stop();
+        } else {
+            StartStopButton.setText("❚❚");
+            isRunning = true;
+            gameLoop.start();
+        }
     }
 
 

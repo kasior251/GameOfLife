@@ -30,18 +30,18 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <Canvas fx:id="gridcanvas" height="535.0" width="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
+        <Canvas fx:id="GridCanvas" height="535.0" width="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
         <ButtonBar layoutX="50.0" layoutY="127.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <buttons>
-                <Button fx:id="testbutton" mnemonicParsing="false" onAction="#handleToggleStartButton" text="Start/Stop" />
-                <Button mnemonicParsing="false" text="Reset" />
-                <Button layoutX="535.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleStepButton" text="Next Generation" />
+                <Button fx:id="StartStopButton" mnemonicParsing="false" onAction="#handleToggleStartButton" text="▶" />
+                <Button fx:id="ResetButton" mnemonicParsing="false" onAction="#handleResetButton" text="Reset" />
+                <Button fx:id="NextGenButton" layoutX="535.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleStepButton" text="Next Generation" />
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Speed:" />
-                <Slider />
+                <Slider fx:id="SpeedSlider" />
                 <Text layoutX="291.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zoom:" />
-                <Slider layoutX="403.0" layoutY="23.0" />
+                <Slider fx:id="ZoomSlider" layoutX="403.0" layoutY="23.0" />
                 <Text layoutX="447.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Generation:" />
-                <Text fx:id="testtext" layoutX="587.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                <Text fx:id="GenCounter" layoutX="587.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
             </buttons>
             <padding>
                 <Insets right="10.0" />

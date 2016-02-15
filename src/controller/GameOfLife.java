@@ -66,22 +66,22 @@ public class GameOfLife implements Initializable {
     }
 
 
-    @FXML
-    protected void handleSubmitButtonAction(MouseEvent event) {
-
-    }
-
-
     @FXML protected void handleStepButton(ActionEvent event) {
         nextGeneration();
     }
 
     @FXML protected void handleToggleStartButton(ActionEvent event) {
-        isRunning = !isRunning;
         new AnimationTimer() {
+            long lastTimer = System.currentTimeMillis();
+
             @Override
             public void handle(long now) {
-                nextGeneration();
+                long currentTimer = System.currentTimeMillis();
+
+                if ((currentTimer - lastTimer) > 500L) {
+                    nextGeneration();
+                    lastTimer = currentTimer;
+                }
             }
         }.start();
     }

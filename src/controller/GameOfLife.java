@@ -9,7 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import model.GameBoard;
 import model.RuleSet;
@@ -36,10 +36,6 @@ public class GameOfLife implements Initializable {
         gameBoard = new GameBoard(100, 150);
         cellSize = 10;
 
-        SpeedSlider.setMax(100);
-        SpeedSlider.setMin(1);
-        SpeedSlider.setValue(100);
-
         gameLoop = new AnimationTimer() {
             long lastTimer = System.currentTimeMillis();
 
@@ -47,7 +43,9 @@ public class GameOfLife implements Initializable {
             public void handle(long now) {
                 long currentTimer = System.currentTimeMillis();
 
-                if ((currentTimer - lastTimer) > 500L) {
+                long tickLength = (long) ((speed*-1)+500);
+
+                if ((currentTimer - lastTimer) > tickLength) {
                     nextGeneration();
                     lastTimer = currentTimer;
                 }
@@ -59,6 +57,8 @@ public class GameOfLife implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         draw(GridCanvas.getGraphicsContext2D());
+
+        speed = SpeedSlider.getValue();
     }
 
     public void nextGeneration() {
@@ -77,6 +77,9 @@ public class GameOfLife implements Initializable {
         gc.clearRect(0, 0, gameBoard.getColumns()*cellSize, gameBoard.getRows()*cellSize);
         for (int i = 0; i < gameBoard.getColumns(); i++) {
             for (int j = 0; j < gameBoard.getRows(); j++) {
+                gc.setStroke(Color.DARKGRAY);
+                gc.strokeRect(cellSize * i, cellSize * j, cellSize, cellSize);
+                gc.setStroke(Color.TRANSPARENT);
                 if (gameBoard.getBoard()[i][j]) {
                     gc.fillRect(cellSize * i, cellSize * j, cellSize, cellSize);
                 }
@@ -87,7 +90,7 @@ public class GameOfLife implements Initializable {
 
     }
 
-    @FXML protected void handleSpeedSlider(ActionEvent event) {
+    @FXML protected void handleSpeedSlider() {
         speed = SpeedSlider.getValue();
     }
 

@@ -1,6 +1,7 @@
 package controller;
 
 
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,7 +20,7 @@ public class GameOfLife implements Initializable {
 
     private GameBoard gameBoard;
     private RuleSet rules;
-    private boolean isRunning;
+    private boolean isRunning = false;
     private double speed;
     private int cellSize;
 
@@ -74,5 +75,16 @@ public class GameOfLife implements Initializable {
     @FXML protected void handleStepButton(ActionEvent event) {
         nextGeneration();
     }
+
+    @FXML protected void handleToggleStartButton(ActionEvent event) {
+        isRunning = !isRunning;
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                nextGeneration();
+            }
+        }.start();
+    }
+
 
 }

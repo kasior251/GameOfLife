@@ -6,11 +6,12 @@ public class GameBoard {
     private int columns;
     private int rows;
 
+
     public GameBoard(int columns, int rows) {
         board = new boolean[columns][rows];
-        board[1][1] = true;
-        board[1][2] = true;
-        board[2][2] = true;
+        for (int i = 0; i < 50; i++) {
+            board[i][i] = true;
+        }
         this.columns = columns;
         this.rows = rows;
     }

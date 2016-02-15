@@ -33,7 +33,7 @@ public class GameOfLife {
         boolean[][] tempBoard = new boolean[gameBoard.getColumns()][gameBoard.getRows()];
         for (int i = 0; i < gameBoard.getColumns(); i++) {
             for (int j = 0; j < gameBoard.getRows(); j++) {
-                tempBoard[i][j] = rules.nextState(gameBoard.getBoard()[i][j], gameBoard.countNeighbours(j, i));
+                tempBoard[i][j] = rules.nextState(gameBoard.getBoard()[i][j], gameBoard.countNeighbours(i, j));
             }
         }
         gameBoard.setBoard(tempBoard);
@@ -42,6 +42,7 @@ public class GameOfLife {
     }
 
     public void draw(GraphicsContext gc) {
+        gc.clearRect(0, 0, gameBoard.getColumns()*cellSize, gameBoard.getRows()*cellSize);
         for (int i = 0; i < gameBoard.getColumns(); i++) {
             for (int j = 0; j < gameBoard.getRows(); j++) {
                 if (gameBoard.getBoard()[i][j]) {

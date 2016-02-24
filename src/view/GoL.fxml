@@ -30,14 +30,14 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <Canvas fx:id="GridCanvas" height="535.0" width="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
+        <Canvas fx:id="GridCanvas" height="535.0" onMouseClicked="#handleGridEvent" onMouseDragged="#handleGridDragEvent" onMousePressed="#handleGridDragStartEvent" width="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
         <ButtonBar layoutX="50.0" layoutY="127.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <buttons>
                 <Button fx:id="StartStopButton" mnemonicParsing="false" onAction="#handleToggleStartButton" text="▶" />
                 <Button fx:id="ResetButton" mnemonicParsing="false" onAction="#handleResetButton" text="Reset" />
                 <Button fx:id="NextGenButton" layoutX="535.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleStepButton" text="Next Generation" />
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Speed:" />
-                <Slider fx:id="SpeedSlider" blockIncrement="50.0" majorTickUnit="250.0" max="500.0" min="30.0" minorTickCount="25" onMouseReleased="#handleSpeedSlider" snapToTicks="true" value="30.0" />
+                <Slider fx:id="SpeedSlider" blockIncrement="50.0" majorTickUnit="250.0" max="500.0" min="150.0" minorTickCount="25" onMouseDragged="#handleSpeedSlider" snapToTicks="true" value="300.0" />
                 <Text layoutX="291.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zoom:" />
                 <Slider fx:id="ZoomSlider" layoutX="403.0" layoutY="23.0" />
                 <Text layoutX="447.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Generation:" />

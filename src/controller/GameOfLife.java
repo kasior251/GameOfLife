@@ -1,5 +1,6 @@
 package controller;
 
+
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,6 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import model.GameBoard;
@@ -25,6 +27,7 @@ public class GameOfLife implements Initializable {
     private int generation;
     private int cellSize;
     private AnimationTimer gameLoop;
+    private boolean dragVal;
 
     @FXML private Button StartStopButton;
     @FXML private Text GenCounter;
@@ -33,7 +36,7 @@ public class GameOfLife implements Initializable {
 
     public GameOfLife() {
         rules = new RuleSet();
-        gameBoard = new GameBoard(100, 150);
+        gameBoard = new GameBoard();
         cellSize = 10;
 
         gameLoop = new AnimationTimer() {
@@ -43,7 +46,7 @@ public class GameOfLife implements Initializable {
             public void handle(long now) {
                 long currentTimer = System.currentTimeMillis();
 
-                long tickLength = (long) ((speed*-1 ) + 500);
+                long tickLength = (long) ((speed*-1)+500);
 
                 if ((currentTimer - lastTimer) > tickLength) {
                     nextGeneration();
@@ -64,28 +67,27 @@ public class GameOfLife implements Initializable {
         generation++;
         GenCounter.setText(Integer.toString(generation));
 
-        boolean[][] tempBoard = new boolean[gameBoard.getColumns()][gameBoard.getRows()];
+        boolean[][] nextBoard = new boolean[gameBoard.getColumns()][gameBoard.getRows()];
         for (int i = 0; i < gameBoard.getColumns(); i++) {
             for (int j = 0; j < gameBoard.getRows(); j++) {
-                tempBoard[i][j] = rules.nextState(gameBoard.getBoard()[i][j], gameBoard.countNeighbours(i, j));
+                nextBoard[i][j] = rules.nextState(gameBoard.getCell(i,j), gameBoard.countNeighbours(i, j));
             }
         }
-
-        gameBoard.setBoard(tempBoard);
+        gameBoard.setBoard(nextBoard);
         draw(GridCanvas.getGraphicsContext2D());
-
     }
 
     public void draw(GraphicsContext gc) {
         gc.clearRect(0, 0, gameBoard.getColumns()*cellSize, gameBoard.getRows()*cellSize);
         for (int i = 0; i < gameBoard.getColumns(); i++) {
             for (int j = 0; j < gameBoard.getRows(); j++) {
+                if (gameBoard.getCell(i,j)) {
+                    gc.fillRect(cellSize * i, cellSize * j, cellSize, cellSize);
+                }
+
                 gc.setStroke(Color.DARKGRAY);
                 gc.strokeRect(cellSize * i, cellSize * j, cellSize, cellSize);
                 gc.setStroke(Color.TRANSPARENT);
-                if (gameBoard.getBoard()[i][j]) {
-                    gc.fillRect(cellSize * i, cellSize * j, cellSize, cellSize);
-                }
             }
         }
     }
@@ -94,25 +96,46 @@ public class GameOfLife implements Initializable {
         speed = SpeedSlider.getValue();
     }
 
+    @FXML protected void handleGridEvent(MouseEvent event) {
+        int xPos = (int) Math.floor(event.getX()/cellSize);
+        int yPos = (int) Math.floor(event.getY()/cellSize);
 
-    @FXML protected void handleResetButton(ActionEvent event) {
+        gameBoard.toggleCell(xPos,yPos);
+        draw(GridCanvas.getGraphicsContext2D());
+    }
+
+    @FXML protected void handleGridDragStartEvent(MouseEvent event) {
+        int xPos = (int) Math.floor(event.getX()/cellSize);
+        int yPos = (int) Math.floor(event.getY()/cellSize);
+        this.dragVal = gameBoard.getCell(xPos,yPos);
+    }
+
+
+    @FXML protected void handleGridDragEvent(MouseEvent event) {
+        int xPos = (int) Math.floor(event.getX()/cellSize);
+        int yPos = (int) Math.floor(event.getY()/cellSize);
+        gameBoard.setCell(xPos,yPos,!dragVal);
+        draw(GridCanvas.getGraphicsContext2D());
+    }
+
+
+    @FXML protected void handleResetButton() {
         gameLoop.stop();
         isRunning = false;
         StartStopButton.setText("▶");
         generation = 0;
         GenCounter.setText(Integer.toString(generation));
 
-        GridCanvas.getGraphicsContext2D().clearRect(0, 0, gameBoard.getColumns()*cellSize, gameBoard.getRows()*cellSize);
         boolean[][] tempBoard = new boolean[gameBoard.getColumns()][gameBoard.getRows()];
         gameBoard.setBoard(tempBoard);
         draw(GridCanvas.getGraphicsContext2D());
     }
 
-    @FXML protected void handleStepButton(ActionEvent event) {
+    @FXML protected void handleStepButton() {
         nextGeneration();
     }
 
-    @FXML protected void handleToggleStartButton(ActionEvent event) {
+    @FXML protected void handleToggleStartButton() {
         if (isRunning) {
             StartStopButton.setText("▶");
             isRunning = false;
@@ -123,4 +146,6 @@ public class GameOfLife implements Initializable {
             gameLoop.start();
         }
     }
+
+
 }

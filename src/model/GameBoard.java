@@ -6,97 +6,96 @@ public class GameBoard {
     private int columns;
     private int rows;
 
-
     public GameBoard(int columns, int rows) {
         board = new boolean[columns][rows];
 
-        board[1][1] = true;
-        board[2][1] = true;
-        board[2][2] = true;
-        board[2][3] = true;
-        board[3][4] = true;
-        board[4][3] = true;
-        board[4][4] = true;
+        board[1+12][1+17] = true;
+        board[2+12][1+17] = true;
+        board[2+12][2+17] = true;
+        board[2+12][3+17] = true;
+        board[3+12][4+17] = true;
+        board[4+12][3+17] = true;
+        board[4+12][4+17] = true;
 
-        board[1][17] = true;
-        board[2][17] = true;
-        board[2][16] = true;
-        board[2][15] = true;
-        board[3][14] = true;
-        board[4][15] = true;
-        board[4][14] = true;
+        board[1+12][17+17] = true;
+        board[2+12][17+17] = true;
+        board[2+12][16+17] = true;
+        board[2+12][15+17] = true;
+        board[3+12][14+17] = true;
+        board[4+12][15+17] = true;
+        board[4+12][14+17] = true;
 
-        board[12][5] = true;
-        board[12][6] = true;
-        board[12][7] = true;
-        board[12][11] = true;
-        board[12][12] = true;
-        board[12][13] = true;
+        board[12+12][5+17] = true;
+        board[12+12][6+17] = true;
+        board[12+12][7+17] = true;
+        board[12+12][11+17] = true;
+        board[12+12][12+17] = true;
+        board[12+12][13+17] = true;
 
-        board[13][5] = true;
-        board[13][8] = true;
-        board[13][10] = true;
-        board[13][13] = true;
+        board[13+12][5+17] = true;
+        board[13+12][8+17] = true;
+        board[13+12][10+17] = true;
+        board[13+12][13+17] = true;
 
-        board[14][5] = true;
-        board[14][13] = true;
+        board[14+12][5+17] = true;
+        board[14+12][13+17] = true;
 
-        board[16][6] = true;
-        board[16][12] = true;
+        board[16+12][6+17] = true;
+        board[16+12][12+17] = true;
 
-        board[17][7] = true;
-        board[17][8] = true;
-        board[17][10] = true;
-        board[17][11] = true;
+        board[17+12][7+17] = true;
+        board[17+12][8+17] = true;
+        board[17+12][10+17] = true;
+        board[17+12][11+17] = true;
 
-        board[26][3] = true;
-        board[26][4] = true;
-        board[27][3] = true;
-        board[27][4] = true;
-        board[26][15] = true;
-        board[26][14] = true;
-        board[27][15] = true;
-        board[27][14] = true;
+        board[26+12][3+17] = true;
+        board[26+12][4+17] = true;
+        board[27+12][3+17] = true;
+        board[27+12][4+17] = true;
+        board[26+12][15+17] = true;
+        board[26+12][14+17] = true;
+        board[27+12][15+17] = true;
+        board[27+12][14+17] = true;
 
-        board[36][7] = true;
-        board[37][7] = true;
-        board[36][11] = true;
-        board[37][11] = true;
+        board[36+12][7+17] = true;
+        board[37+12][7+17] = true;
+        board[36+12][11+17] = true;
+        board[37+12][11+17] = true;
 
-        board[40][4] = true;
-        board[40][5] = true;
-        board[40][7] = true;
-        board[40][11] = true;
-        board[40][13] = true;
-        board[40][14] = true;
+        board[40+12][4+17] = true;
+        board[40+12][5+17] = true;
+        board[40+12][7+17] = true;
+        board[40+12][11+17] = true;
+        board[40+12][13+17] = true;
+        board[40+12][14+17] = true;
 
-        board[41][5] = true;
-        board[41][6] = true;
-        board[41][7] = true;
-        board[41][11] = true;
-        board[41][12] = true;
-        board[41][13] = true;
+        board[41+12][5+17] = true;
+        board[41+12][6+17] = true;
+        board[41+12][7+17] = true;
+        board[41+12][11+17] = true;
+        board[41+12][12+17] = true;
+        board[41+12][13+17] = true;
 
-        board[42][6] = true;
-        board[42][12] = true;
+        board[42+12][6+17] = true;
+        board[42+12][12+17] = true;
 
-        board[49][4] = true;
-        board[49][14] = true;
-        board[49][3] = true;
-        board[49][15] = true;
+        board[49+12][4+17] = true;
+        board[49+12][14+17] = true;
+        board[49+12][3+17] = true;
+        board[49+12][15+17] = true;
 
-        board[50][4] = true;
-        board[50][14] = true;
+        board[50+12][4+17] = true;
+        board[50+12][14+17] = true;
 
-        board[51][1] = true;
-        board[51][2] = true;
-        board[51][3] = true;
-        board[51][15] = true;
-        board[51][16] = true;
-        board[51][17] = true;
+        board[51+12][1+17] = true;
+        board[51+12][2+17] = true;
+        board[51+12][3+17] = true;
+        board[51+12][15+17] = true;
+        board[51+12][16+17] = true;
+        board[51+12][17+17] = true;
 
-        board[52][17] = true;
-        board[52][1] = true;
+        board[52+12][17+17] = true;
+        board[52+12][1+17] = true;
 
         this.columns = columns;
         this.rows = rows;

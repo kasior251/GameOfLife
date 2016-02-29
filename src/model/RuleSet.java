@@ -12,6 +12,7 @@ public class RuleSet {
         rules[0][3] = true;
         rules[1][2] = true;
         rules[1][3] = true;
+        rules[0][6] = true;
     }
 
     public boolean nextState(boolean state, int neighbours) {

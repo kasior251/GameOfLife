@@ -15,7 +15,7 @@
                     <items>
                         <Menu mnemonicParsing="false" text="Import Pattern ..">
                             <items>
-                                <MenuItem mnemonicParsing="false" text=".. from File" />
+                                <MenuItem fx:id="ImportFromFileButton" mnemonicParsing="false" onAction="#handleImportFile" text=".. from File" />
                                 <MenuItem mnemonicParsing="false" text=".. from URL" />
                             </items>
                         </Menu>
@@ -30,7 +30,7 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <Canvas fx:id="GridCanvas" height="535.0" onMouseClicked="#handleGridEvent" onMouseDragged="#handleGridDragEvent" onMousePressed="#handleGridDragStartEvent" width="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
+        <Canvas fx:id="GridCanvas" height="535.0" onMouseDragged="#handleGridDragEvent" onMousePressed="#handleGridEvent" width="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
         <ButtonBar layoutX="50.0" layoutY="127.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <buttons>
                 <Button fx:id="StartStopButton" mnemonicParsing="false" onAction="#handleToggleStartButton" text="▶" />
@@ -41,7 +41,7 @@
                 <Text layoutX="291.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zoom:" />
                 <Slider fx:id="ZoomSlider" layoutX="403.0" layoutY="23.0" />
                 <Text layoutX="447.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Generation:" />
-                <Text fx:id="GenCounter" layoutX="587.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                <Text fx:id="GenCounter" layoutX="587.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="RIGHT" wrappingWidth="30.0" />
             </buttons>
             <padding>
                 <Insets right="10.0" />

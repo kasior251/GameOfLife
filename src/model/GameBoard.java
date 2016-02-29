@@ -7,10 +7,7 @@ public class GameBoard {
     private int rows;
 
     public GameBoard() {
-        board = new boolean[100][150];
-
-        this.columns = 100;
-        this.rows = 150;
+        this(150, 100);
 
 
         board[13][18] = true;

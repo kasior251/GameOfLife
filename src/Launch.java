@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class Launch extends Application {
 
@@ -12,8 +13,7 @@ public class Launch extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("view/GoL.fxml"));
 
-        Scene scene = new Scene(root, 800, 600);
-
+        Scene scene = new Scene(root);
         stage.setTitle("FXML Welcome");
         stage.setScene(scene);
         stage.show();

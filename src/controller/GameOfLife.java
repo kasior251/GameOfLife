@@ -2,15 +2,14 @@ package controller;
 
 
 import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -36,14 +35,16 @@ public class GameOfLife implements Initializable {
 
     @FXML private Button StartStopButton;
     @FXML private Text GenCounter;
+    @FXML private Canvas CellCanvas;
     @FXML private Canvas GridCanvas;
+    @FXML private Canvas BlurCanvas;
     @FXML private Slider SpeedSlider;
     @FXML private MenuItem importerButton;
 
     public GameOfLife() {
         rules = new RuleSet();
         gameBoard = new GameBoard();
-        cellSize = 5;
+        cellSize = 2;
 
         gameLoop = new AnimationTimer() {
             long lastTimer = System.currentTimeMillis();
@@ -64,12 +65,35 @@ public class GameOfLife implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        draw(GridCanvas.getGraphicsContext2D());
+        GaussianBlur backgroundBlur = new GaussianBlur();
+//        backgroundBlur.setRadius(10);
+        backgroundBlur.setRadius(15);
+        BlurCanvas.setEffect(backgroundBlur);
+
+        CellCanvas.getGraphicsContext2D().setFill(Color.GREENYELLOW);
+//        CellCanvas.setRotate(45.0);
+        BlurCanvas.getGraphicsContext2D().setFill(Color.GREENYELLOW);
+//        BlurCanvas.setRotate(45.0);
+        GridCanvas.getGraphicsContext2D().setFill(Color.BLACK);
+        GridCanvas.getGraphicsContext2D().fillRect(0, 0, cellSize * gameBoard.getColumns(), cellSize * gameBoard.getRows());
+
+//        BlurCanvas.setScaleX(1.5);
+//        BlurCanvas.setScaleY(1.5);
+//        CellCanvas.setScaleX(1.5);
+//        CellCanvas.setScaleY(1.5);
+
+        draw(CellCanvas.getGraphicsContext2D());
 
         speed = SpeedSlider.getValue();
     }
 
     public void nextGeneration() {
+        if (generation == 47) {
+            rules.setRule(false, 6, true);
+            rules.setRule(false, 1, false);
+            rules.setRule(false, 2, false);
+        }
+
         generation++;
         GenCounter.setText(Integer.toString(generation));
 
@@ -80,20 +104,26 @@ public class GameOfLife implements Initializable {
             }
         }
         gameBoard.setBoard(nextBoard);
-        draw(GridCanvas.getGraphicsContext2D());
+        draw(CellCanvas.getGraphicsContext2D());
     }
 
     public void draw(GraphicsContext gc) {
+        if (generation == 225) {
+            BlurCanvas.getGraphicsContext2D().setFill(Color.WHITE);
+            CellCanvas.getGraphicsContext2D().setFill(Color.WHITE);
+        }
         gc.clearRect(0, 0, gameBoard.getColumns()*cellSize, gameBoard.getRows()*cellSize);
+        BlurCanvas.getGraphicsContext2D().clearRect(0, 0, gameBoard.getColumns()*cellSize, gameBoard.getRows()*cellSize);
         for (int i = 0; i < gameBoard.getColumns(); i++) {
             for (int j = 0; j < gameBoard.getRows(); j++) {
                 if (gameBoard.getCell(i,j)) {
+                    BlurCanvas.getGraphicsContext2D().fillRect(cellSize * i, cellSize * j, cellSize, cellSize);
                     gc.fillRect(cellSize * i, cellSize * j, cellSize, cellSize);
                 }
 
-                gc.setStroke(Color.DARKGRAY);
+                /*gc.setStroke(Color.DARKGRAY);
                 gc.strokeRect(cellSize * i, cellSize * j, cellSize, cellSize);
-                gc.setStroke(Color.TRANSPARENT);
+                gc.setStroke(Color.TRANSPARENT);*/
             }
         }
     }
@@ -108,7 +138,7 @@ public class GameOfLife implements Initializable {
         if ((xPos >= 0) && (xPos < gameBoard.getColumns()) && (yPos >= 0) && (yPos < gameBoard.getRows())) {
             this.dragVal = gameBoard.getCell(xPos,yPos);
             gameBoard.toggleCell(xPos,yPos);
-            draw(GridCanvas.getGraphicsContext2D());
+            draw(CellCanvas.getGraphicsContext2D());
         }
     }
 
@@ -119,7 +149,7 @@ public class GameOfLife implements Initializable {
             this.dragX = dragX;
             this.dragY = dragY;
             gameBoard.setCell(dragX, dragY, !dragVal);
-            draw(GridCanvas.getGraphicsContext2D());
+            draw(CellCanvas.getGraphicsContext2D());
         }
     }
 
@@ -133,7 +163,7 @@ public class GameOfLife implements Initializable {
 
         boolean[][] tempBoard = new boolean[gameBoard.getColumns()][gameBoard.getRows()];
         gameBoard.setBoard(tempBoard);
-        draw(GridCanvas.getGraphicsContext2D());
+        draw(CellCanvas.getGraphicsContext2D());
     }
 
     @FXML protected void handleStepButton() {
@@ -154,5 +184,12 @@ public class GameOfLife implements Initializable {
 
     @FXML protected void handleImportFile() {
         GameBoardImporter importer = new GameBoardImporter(SpeedSlider);
+    }
+
+    @FXML protected void handleChangeRules() {
+        RuleEditor ruleHandler = new RuleEditor();
+        ruleHandler.showAndWait();
+
+        rules = new RuleSet(ruleHandler.rules);
     }
 }

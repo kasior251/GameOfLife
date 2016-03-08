@@ -16,6 +16,7 @@ import javafx.scene.text.Text;
 import model.GameBoard;
 import model.RuleSet;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -88,11 +89,27 @@ public class GameOfLife implements Initializable {
     }
 
     public void nextGeneration() {
-        if (generation == 47) {
+/*        if (generation == 47) {
             rules.setRule(false, 6, true);
             rules.setRule(false, 1, false);
             rules.setRule(false, 2, false);
-        }
+        }*/
+
+/*        if ((generation % 20) < 15) {
+            System.out.println("True: "+generation);
+            rules.setRule(false, 1, true);
+            rules.setRule(true, 1, true);
+            rules.setRule(false, 2, true);
+            rules.setRule(false, 3, true);
+            rules.setRule(false, 6, true);
+        } else {
+            System.out.println("False: "+generation);
+            rules.setRule(false, 1, false);
+            rules.setRule(true, 1, false);
+            rules.setRule(false, 2, false);
+            rules.setRule(false, 3, false);
+            rules.setRule(false, 6, false);
+        }*/
 
         generation++;
         GenCounter.setText(Integer.toString(generation));
@@ -161,8 +178,7 @@ public class GameOfLife implements Initializable {
         generation = 0;
         GenCounter.setText(Integer.toString(generation));
 
-        boolean[][] tempBoard = new boolean[gameBoard.getColumns()][gameBoard.getRows()];
-        gameBoard.setBoard(tempBoard);
+        gameBoard = new GameBoard(400,300);
         draw(CellCanvas.getGraphicsContext2D());
     }
 
@@ -183,7 +199,15 @@ public class GameOfLife implements Initializable {
     }
 
     @FXML protected void handleImportFile() {
-        GameBoardImporter importer = new GameBoardImporter(SpeedSlider);
+        try {
+            GameBoardImporter importer = new GameBoardImporter(SpeedSlider);
+
+            rules = new RuleSet(importer.ruleSet);
+            gameBoard.setBoard(importer.gameBoard);
+            draw(CellCanvas.getGraphicsContext2D());
+        } catch (IOException e) {
+            System.out.println("IOException in instantiation of GameBoardImporter in GameOfLife");
+        }
     }
 
     @FXML protected void handleChangeRules() {

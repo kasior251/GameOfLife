@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Arrays;
+
 public class GameBoard {
 
     private boolean[][] board;
@@ -148,10 +150,21 @@ public class GameBoard {
                         count++;
                     }
                 }
-
             }
         }
         return count;
     }
 
+    @Override
+    public String toString() {
+        String boardString = "";
+        for (boolean[] row : board) {
+            for (boolean col : row) {
+                boardString += (col) ? "x" : "o";
+            }
+            boardString += "\n";
+        }
+
+        return boardString;
+    }
 }

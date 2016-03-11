@@ -11,8 +11,6 @@ public class RuleSet {
 
     public RuleSet() {
         rules = new boolean[2][9];
-        /*rules[0][1] = true;
-        rules[0][2] = true;*/
         rules[0][3] = true;
         rules[1][2] = true;
         rules[1][3] = true;

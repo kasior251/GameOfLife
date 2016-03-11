@@ -28,6 +28,7 @@ public class GameOfLife implements Initializable {
     private double speed;
     private int generation;
     private int cellSize;
+    private double zoom = 1;
     private AnimationTimer gameLoop;
     private boolean dragVal;
     private int dragX;
@@ -40,12 +41,13 @@ public class GameOfLife implements Initializable {
     @FXML private Canvas GridCanvas;
     @FXML private Canvas BlurCanvas;
     @FXML private Slider SpeedSlider;
+    @FXML private Slider ZoomSlider;
     @FXML private MenuItem importerButton;
 
     public GameOfLife() {
         rules = new RuleSet();
         gameBoard = new GameBoard();
-        cellSize = 2;
+        cellSize = 1;
 
         gameLoop = new AnimationTimer() {
             long lastTimer = System.currentTimeMillis();
@@ -78,10 +80,8 @@ public class GameOfLife implements Initializable {
         GridCanvas.getGraphicsContext2D().setFill(Color.BLACK);
         GridCanvas.getGraphicsContext2D().fillRect(0, 0, cellSize * gameBoard.getColumns(), cellSize * gameBoard.getRows());
 
-//        BlurCanvas.setScaleX(1.5);
-//        BlurCanvas.setScaleY(1.5);
-//        CellCanvas.setScaleX(1.5);
-//        CellCanvas.setScaleY(1.5);
+//        BlurCanvas.getGraphicsContext2D().scale(0.5,0.5);
+//        CellCanvas.getGraphicsContext2D().scale(0.5,0.5);
 
         draw(CellCanvas.getGraphicsContext2D());
 
@@ -89,23 +89,22 @@ public class GameOfLife implements Initializable {
     }
 
     public void nextGeneration() {
-/*        if (generation == 47) {
+//        if (generation == 47) {
+/*        if (generation == 100) {
             rules.setRule(false, 6, true);
             rules.setRule(false, 1, false);
             rules.setRule(false, 2, false);
         }*/
 
 /*        if ((generation % 20) < 15) {
-            System.out.println("True: "+generation);
-            rules.setRule(false, 1, true);
-            rules.setRule(true, 1, true);
+            //rules.setRule(false, 1, true);
+            //rules.setRule(true, 1, true);
             rules.setRule(false, 2, true);
             rules.setRule(false, 3, true);
             rules.setRule(false, 6, true);
         } else {
-            System.out.println("False: "+generation);
             rules.setRule(false, 1, false);
-            rules.setRule(true, 1, false);
+            //rules.setRule(true, 1, false);
             rules.setRule(false, 2, false);
             rules.setRule(false, 3, false);
             rules.setRule(false, 6, false);
@@ -125,10 +124,10 @@ public class GameOfLife implements Initializable {
     }
 
     public void draw(GraphicsContext gc) {
-        if (generation == 225) {
+/*        if (generation == 200) {
             BlurCanvas.getGraphicsContext2D().setFill(Color.WHITE);
             CellCanvas.getGraphicsContext2D().setFill(Color.WHITE);
-        }
+        }*/
         gc.clearRect(0, 0, gameBoard.getColumns()*cellSize, gameBoard.getRows()*cellSize);
         BlurCanvas.getGraphicsContext2D().clearRect(0, 0, gameBoard.getColumns()*cellSize, gameBoard.getRows()*cellSize);
         for (int i = 0; i < gameBoard.getColumns(); i++) {
@@ -147,6 +146,15 @@ public class GameOfLife implements Initializable {
 
     @FXML protected void handleSpeedSlider() {
         speed = SpeedSlider.getValue();
+    }
+
+    @FXML protected void handleZoomSlider() {
+        double zoomDelta = 0.5;
+        /*BlurCanvas.getGraphicsContext2D().scale(zoomDelta,zoomDelta);
+        CellCanvas.getGraphicsContext2D().scale(zoomDelta,zoomDelta);*/
+        BlurCanvas.getGraphicsContext2D().translate(0.5,0.5);
+        CellCanvas.getGraphicsContext2D().translate(0.5,0.5);
+        draw(CellCanvas.getGraphicsContext2D());
     }
 
     @FXML protected void handleGridEvent(MouseEvent event) {
@@ -178,7 +186,7 @@ public class GameOfLife implements Initializable {
         generation = 0;
         GenCounter.setText(Integer.toString(generation));
 
-        gameBoard = new GameBoard(400,300);
+        gameBoard = new GameBoard(2400,1200);
         draw(CellCanvas.getGraphicsContext2D());
     }
 
@@ -203,7 +211,7 @@ public class GameOfLife implements Initializable {
             GameBoardImporter importer = new GameBoardImporter(SpeedSlider);
 
             rules = new RuleSet(importer.ruleSet);
-            gameBoard.setBoard(importer.gameBoard);
+            gameBoard.addBoard(importer.gameBoard);
             draw(CellCanvas.getGraphicsContext2D());
         } catch (IOException e) {
             System.out.println("IOException in instantiation of GameBoardImporter in GameOfLife");

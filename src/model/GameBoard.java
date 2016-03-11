@@ -9,7 +9,7 @@ public class GameBoard {
     private int rows;
 
     public GameBoard() {
-        this(400, 300);
+        this(2400, 1200);
         int xOffset = 160;
         int yOffset = 130;
 
@@ -114,6 +114,18 @@ public class GameBoard {
         this.board = board;
         this.columns = board.length;
         this.rows = board[0].length;
+    }
+
+    public void addBoard(boolean[][] board) {
+        int xOffset = (int)Math.floor((this.columns - board[0].length)/2);
+        int yOffset = (int)Math.floor((this.rows - board.length)/2);
+
+        for(int y = 0; y < board.length;y++) {
+            for(int x = 0; x < board[0].length;x++) {
+                this.setCell(x+xOffset, y+yOffset, this.getCell(x+xOffset,y+yOffset)|| board[y][x]);
+            }
+        }
+
     }
 
     public int getRows() {

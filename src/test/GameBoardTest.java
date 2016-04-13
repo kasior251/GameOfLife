@@ -2,7 +2,7 @@ package test;
 
 import junit.framework.TestCase;
 import model.GameBoard;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /**
  * Created by Consilium on 16.02.2016.
@@ -14,12 +14,12 @@ public class GameBoardTest extends TestCase {
 
     }
 
-    @org.junit.Test
+    @Test
     public void testGetColumns() throws Exception {
 
     }
 
-    @org.junit.Test
+    @Test
     public void testCountNeighbours() throws Exception {
         boolean[][] array = {{true,true,false},{false,true,false},{true,true,false}};
         gB = new GameBoard(3,3);
@@ -27,7 +27,7 @@ public class GameBoardTest extends TestCase {
         assertEquals(4,gB.countNeighbours(1,1));
     }
 
-    @org.junit.Test
+    @Test
     public void testGetRows() throws Exception {
 
     }

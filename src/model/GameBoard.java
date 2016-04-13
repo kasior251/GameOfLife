@@ -9,9 +9,9 @@ public class GameBoard {
     private int rows;
 
     public GameBoard() {
-        this(2400, 1200);
-        int xOffset = 160;
-        int yOffset = 130;
+        this(1200, 600);
+        int xOffset = (int)Math.floor((this.columns - 80)/2);
+        int yOffset = (int)Math.floor((this.rows - 50)/2);
 
         board[xOffset+13][yOffset+18] = true;
         board[xOffset+14][yOffset+18] = true;

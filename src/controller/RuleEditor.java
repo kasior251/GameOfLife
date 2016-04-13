@@ -61,7 +61,7 @@ public class RuleEditor extends Stage {
         catch (IOException e)
         {
             e.printStackTrace();
-            System.out.println("something");
+            System.out.println("Error when loading RuleEditor FXML scene");
         }
     }
 }

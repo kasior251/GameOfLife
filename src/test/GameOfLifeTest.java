@@ -2,8 +2,6 @@ package test;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by Consilium on 24.02.2016.
  */

@@ -40,6 +40,7 @@ public class GameBoardImporter {
 
     public void readGameBoard(Reader r) throws IOException  {
         BufferedReader file = new BufferedReader(r);
+
         String line;
         StringBuilder patternString = new StringBuilder();
         String parameters = "";

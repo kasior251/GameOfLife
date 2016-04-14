@@ -53,8 +53,8 @@ public class GameOfLife implements Initializable {
         rules = new RuleSet();
         gameBoard = new GameBoard();
         cellSize = 1;
-        canvasOffsetX = 0;
-        canvasOffsetY = 0;
+        canvasOffsetX = 0;//-1200/2;
+        canvasOffsetY = 0;//-600/2;
 
         gameLoop = new AnimationTimer() {
             long lastTimer = System.currentTimeMillis();
@@ -150,12 +150,13 @@ public class GameOfLife implements Initializable {
 
     @FXML protected void handleZoomSlider() {
         zoom = ZoomSlider.getValue();
+        System.out.println(zoom);
 
         this.zoomOffsetX = (1200-(1200*zoom))/2;
         this.zoomOffsetY = (600-(600*zoom))/2;
 
-        BlurCanvas.getGraphicsContext2D().setTransform(zoom,0,0,zoom,zoomOffsetX,zoomOffsetY);
-        CellCanvas.getGraphicsContext2D().setTransform(zoom,0,0,zoom,zoomOffsetX,zoomOffsetY);
+        BlurCanvas.getGraphicsContext2D().setTransform(zoom,0,0,zoom,canvasOffsetX*zoom+zoomOffsetX,canvasOffsetY*zoom+zoomOffsetY);
+        CellCanvas.getGraphicsContext2D().setTransform(zoom,0,0,zoom,canvasOffsetX*zoom+zoomOffsetX,canvasOffsetY*zoom+zoomOffsetY);
         draw(CellCanvas.getGraphicsContext2D());
     }
 
@@ -164,42 +165,44 @@ public class GameOfLife implements Initializable {
         //int yPos = (int) Math.floor(((600*zoom/2)+event.getY())/zoom-(600/zoom/2));
         int yPos = (int)(Math.floor((canvasOffsetX+event.getX())/zoom));
         int xPos = (int)(Math.floor((canvasOffsetY+event.getY())/zoom));
+
         //System.out.println(xPos+"   "+event.getX()+"   "+canvasOffsetX+"    "+(Math.floor((canvasOffsetX+event.getX())/zoom)));
         //System.out.println(yPos+"   "+event.getY()+"   "+canvasOffsetY+"    "+(Math.floor((canvasOffsetY+event.getY())/zoom)));
-        if ((xPos >= 0) && (xPos < gameBoard.getColumns()) && (yPos >= 0) && (yPos < gameBoard.getRows())) {
-            this.dragVal = gameBoard.getCell(xPos,yPos);
-            gameBoard.toggleCell(xPos,yPos);
-            if (dragVal) {
-                BlurCanvas.getGraphicsContext2D().clearRect(cellSize * xPos, cellSize * yPos, cellSize, cellSize);
-                CellCanvas.getGraphicsContext2D().clearRect(cellSize * xPos, cellSize * yPos, cellSize, cellSize);
-            } else {
-                BlurCanvas.getGraphicsContext2D().fillRect(cellSize * xPos, cellSize * yPos, cellSize, cellSize);
-                CellCanvas.getGraphicsContext2D().fillRect(cellSize * xPos, cellSize * yPos, cellSize, cellSize);
+        if (event.getButton() == MouseButton.PRIMARY) {
+            if ((xPos >= 0) && (xPos < gameBoard.getColumns()) && (yPos >= 0) && (yPos < gameBoard.getRows())) {
+                this.dragVal = gameBoard.getCell(xPos, yPos);
+                gameBoard.toggleCell(xPos, yPos);
+                if (dragVal) {
+                    BlurCanvas.getGraphicsContext2D().clearRect(cellSize * xPos, cellSize * yPos, cellSize, cellSize);
+                    CellCanvas.getGraphicsContext2D().clearRect(cellSize * xPos, cellSize * yPos, cellSize, cellSize);
+                } else {
+                    BlurCanvas.getGraphicsContext2D().fillRect(cellSize * xPos, cellSize * yPos, cellSize, cellSize);
+                    CellCanvas.getGraphicsContext2D().fillRect(cellSize * xPos, cellSize * yPos, cellSize, cellSize);
+                }
             }
+        } else {
+            this.dragX = (int) Math.floor(zoomOffsetX+event.getX()*zoom);
+            this.dragY = (int) Math.floor(zoomOffsetY+event.getY()*zoom);
         }
     }
 
     @FXML protected void handleGridDragEvent(MouseEvent event) {
-        //Nå er disse basert på midten av skjermen - men dvs. at klikking ikke fungerer hvis vi får panning til å fungere.
-        //Eneste grunnen til at det fungerer nå er at zoominga også går til midten av skjermen.
-
-        //TODO: Lag to variabler basert på transpose offset i zoomen, og bruk de i formelen her. Panning vil også bruke/endre disse variablene.
-
-/*        int dragX = (int) Math.floor(((1200*zoom/2)+event.getX())/zoom-1200/zoom/2);
-        int dragY = (int) Math.floor(((600*zoom/2)+event.getY())/zoom-(600/zoom/2));*/
         int dragX = (int) Math.floor(zoomOffsetX+event.getX()*zoom);
         int dragY = (int) Math.floor(zoomOffsetY+event.getY()*zoom);
+        System.out.println("OffsetX: "+zoomOffsetX+" OffsetY: "+zoomOffsetY);
+        System.out.println("GetX: "+event.getX()+" GetY: "+event.getY());
         if (event.getButton() == MouseButton.PRIMARY) {
-            if (!(this.dragX == dragX && this.dragY == dragY) && (dragX >= 0) && (dragX < gameBoard.getColumns()) && (dragY >= 0) && (dragY < gameBoard.getRows())) {
-                this.dragX = dragX;
-                this.dragY = dragY;
-                gameBoard.setCell(dragX, dragY, !dragVal);
+            int xPos = (int)Math.floor((zoomOffsetX * -1 + event.getX()) / zoom-canvasOffsetX);
+            int yPos = (int)Math.floor((zoomOffsetY * -1 + event.getY()) / zoom-canvasOffsetY);
+            System.out.println("xPos: "+xPos+" yPos: "+yPos);
+            if (/*!(this.dragX == dragX && this.dragY == dragY) &&*/ (xPos >= 0) && (xPos < gameBoard.getColumns()) && (yPos >= 0) && (yPos < gameBoard.getRows())) {
+                gameBoard.setCell(xPos, yPos, !dragVal);
                 if (dragVal) {
                     BlurCanvas.getGraphicsContext2D().clearRect(cellSize * dragX, cellSize * dragY, cellSize, cellSize);
                     CellCanvas.getGraphicsContext2D().clearRect(cellSize * dragX, cellSize * dragY, cellSize, cellSize);
                 } else {
-                    BlurCanvas.getGraphicsContext2D().fillRect(cellSize * dragX, cellSize * dragY, cellSize, cellSize);
-                    CellCanvas.getGraphicsContext2D().fillRect(cellSize * dragX, cellSize * dragY, cellSize, cellSize);
+                    BlurCanvas.getGraphicsContext2D().fillRect(cellSize * xPos, cellSize * yPos, cellSize, cellSize);
+                    CellCanvas.getGraphicsContext2D().fillRect(cellSize * xPos, cellSize * yPos, cellSize, cellSize);
                 }
 
             }
@@ -207,13 +210,16 @@ public class GameOfLife implements Initializable {
 /*            if (!(this.dragX == dragX && this.dragY == dragY) && (dragX >= 0) && (dragX < gameBoard.getColumns()) && (dragY >= 0) && (dragY < gameBoard.getRows())) {
                 System.out.println((dragX-this.dragX)*zoom);
                 System.out.println((dragY-this.dragY)*zoom);*/
-                canvasOffsetX += (dragX-this.dragX);
-                canvasOffsetY += (dragY-this.dragY);
-                this.dragX = dragX;
-                this.dragY = dragY;
-                BlurCanvas.getGraphicsContext2D().setTransform(zoom,0,0,zoom,canvasOffsetX+zoomOffsetX-600,canvasOffsetY+zoomOffsetY-300);
-                CellCanvas.getGraphicsContext2D().setTransform(zoom,0,0,zoom,canvasOffsetX+zoomOffsetX-600,canvasOffsetY+zoomOffsetY-300);
+
+                BlurCanvas.getGraphicsContext2D().setTransform(zoom,0,0,zoom,canvasOffsetX*zoom+zoomOffsetX,canvasOffsetY*zoom+zoomOffsetY);
+                CellCanvas.getGraphicsContext2D().setTransform(zoom,0,0,zoom,canvasOffsetX*zoom+zoomOffsetX,canvasOffsetY*zoom+zoomOffsetY);
                 draw(CellCanvas.getGraphicsContext2D());
+            canvasOffsetX += ((dragX-this.dragX)/zoom)/zoom;
+            canvasOffsetY += ((dragY-this.dragY)/zoom)/zoom;
+            System.out.println(canvasOffsetX);
+            System.out.println(canvasOffsetY);
+            this.dragX = dragX;
+            this.dragY = dragY;
             //}
         }
     }

@@ -41,7 +41,7 @@
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Speed:" />
                 <Slider fx:id="SpeedSlider" blockIncrement="50.0" majorTickUnit="250.0" max="500.0" min="150.0" minorTickCount="25" onMouseDragged="#handleSpeedSlider" snapToTicks="true" value="300.0" />
                 <Text layoutX="291.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zoom:" />
-                <Slider fx:id="ZoomSlider" blockIncrement="0.01" layoutX="403.0" layoutY="23.0" max="8.0" min="0.5" onMouseDragged="#handleZoomSlider" value="1.0" />
+                <Slider fx:id="ZoomSlider" blockIncrement="1.0" layoutX="403.0" layoutY="23.0" majorTickUnit="1.0" max="8.0" min="1.0" minorTickCount="1" onMouseDragged="#handleZoomSlider" value="1.0" />
                 <Text layoutX="447.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Generation:" />
                 <Text fx:id="GenCounter" layoutX="587.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="RIGHT" wrappingWidth="30.0" />
             </buttons>

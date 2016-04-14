@@ -47,7 +47,7 @@ public class GameBoardImporter {
         List<String> comments = new ArrayList<String>();
         while ((line = file.readLine()) != null) {
             if (line.matches("(.*)[#](.*)")) {
-                //This matches every comment line. Possibly adjust for #r later?
+                //This matches every comment line. Posd ibly adjust for #r later?
                 comments.add(line);
             } else if (line.matches("(.*)[\\$!b](.*)")) {
                 //This matches every pattern line - lines with a $ or ! in it.

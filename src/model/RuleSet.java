@@ -10,14 +10,18 @@ public class RuleSet {
     private boolean[][] rules;
 
     public RuleSet() {
-        rules = new boolean[2][9];
-        rules[0][3] = true;
-        rules[1][2] = true;
-        rules[1][3] = true;
+        resetRules();
     }
 
     public RuleSet(boolean[][] rules) {
         this.rules = rules;
+    }
+
+    public void resetRules() {
+        rules = new boolean[2][9];
+        rules[0][3] = true;
+        rules[1][2] = true;
+        rules[1][3] = true;
     }
 
     public boolean nextState(boolean state, int neighbours) {

@@ -9,7 +9,7 @@ public class GameBoard {
     private int rows;
 
     public GameBoard() {
-        this(1200, 600);
+        this(600, 300);
         int xOffset = (int)Math.floor((this.columns - 80)/2);
         int yOffset = (int)Math.floor((this.rows - 50)/2);
 

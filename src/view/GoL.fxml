@@ -24,7 +24,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Rules">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Reset to Default" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleResetRules" text="Reset to Default" />
                         <MenuItem mnemonicParsing="false" onAction="#handleChangeRules" text="Customize Rules" />
                     </items>
                 </Menu>

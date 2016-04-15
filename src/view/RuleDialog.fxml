@@ -77,6 +77,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
+            <CheckBox fx:id="aliveOne2" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" />
             <CheckBox fx:id="aliveOne" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="1" />
             <CheckBox fx:id="aliveTwo" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="2" />
             <CheckBox fx:id="aliveThree" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" selected="true" GridPane.columnIndex="3" />
@@ -85,6 +86,7 @@
             <CheckBox fx:id="aliveSix" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="6" />
             <CheckBox fx:id="aliveSeven" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="7" />
             <CheckBox fx:id="aliveEight" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="8" />
+            <CheckBox fx:id="aliveOne1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" GridPane.rowIndex="1" />
             <CheckBox fx:id="deadOne" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <CheckBox alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" selected="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <CheckBox alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" selected="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
@@ -93,8 +95,6 @@
             <CheckBox alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="6" GridPane.rowIndex="1" />
             <CheckBox alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="7" GridPane.rowIndex="1" />
             <CheckBox alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="8" GridPane.rowIndex="1" />
-            <CheckBox fx:id="aliveOne1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" GridPane.rowIndex="1" />
-            <CheckBox fx:id="aliveOne2" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" />
          </children>
       </GridPane>
    </children>

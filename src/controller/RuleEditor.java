@@ -19,38 +19,12 @@ public class RuleEditor extends Stage {
     @FXML
     protected GridPane grid;
 
-    public boolean[][] rules = new boolean[2][9];
+    public boolean[][] rules;
 
-    @FXML protected void handleOk() {
-        handleApply();
-        handleCancel();
-    }
-
-    @FXML protected void handleCancel() {
-        close();
-    }
-
-    @FXML protected void handleApply() {
-        int y,x;
-        for (Node cbox : grid.getChildren()) {
-            if (GridPane.getColumnIndex(cbox) == null) {
-                x = 0;
-            } else {
-                x = GridPane.getColumnIndex(cbox);
-            }
-            if (GridPane.getRowIndex(cbox) == null) {
-                y = 0;
-            } else {
-                y = GridPane.getRowIndex(cbox);
-            }
-
-            rules[y][x] = ((CheckBox)cbox).isSelected();
-        }
-    }
-
-    public RuleEditor() {
+    public RuleEditor(boolean[][] currentRules) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/RuleDialog.fxml"));
         loader.setController(this);
+        this.rules = currentRules;
 
         setTitle("Customize the Game of Life Ruleset");
 
@@ -62,6 +36,35 @@ public class RuleEditor extends Stage {
         {
             e.printStackTrace();
             System.out.println("Error when loading RuleEditor FXML scene");
+        }
+
+        loadRules();
+    }
+
+    private void loadRules() {
+        for (int state = 0; state < 2; state++) {
+            for (int neighbours = 0; neighbours < 9; neighbours++) {
+/*                System.out.println(currentRules[state][neighbours]);
+                System.out.println(state+"  "+neighbours);*/
+                ((CheckBox)grid.getChildren().toArray()[neighbours+9*state]).setSelected(rules[state][neighbours]);
+            }
+        }
+    }
+
+    @FXML protected void handleOk() {
+        handleApply();
+        handleCancel();
+    }
+
+    @FXML protected void handleCancel() {
+        close();
+    }
+
+    @FXML protected void handleApply() {
+        for (int state = 0; state < 2; state++) {
+            for (int neighbours = 0; neighbours < 9; neighbours++) {
+                rules[state][neighbours] = ((CheckBox)grid.getChildren().toArray()[neighbours+9*state]).isSelected();
+            }
         }
     }
 }

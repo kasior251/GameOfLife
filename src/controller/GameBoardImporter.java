@@ -3,6 +3,7 @@ package controller;
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
 import model.GameBoard;
+import model.PatternFormatException;
 import model.RuleSet;
 
 import java.io.*;
@@ -20,11 +21,11 @@ public class GameBoardImporter {
     private int columns;
 
 
-    public GameBoardImporter(Node node) throws IOException {
+    public GameBoardImporter(Node node) throws IOException, PatternFormatException {
         readFromFile(node);
     }
 
-    public void readFromFile(Node node) throws IOException {
+    public void readFromFile(Node node) throws IOException, PatternFormatException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Gameboard pattern file (.rle, .sof)");
         fileChooser.getExtensionFilters().addAll(
@@ -38,29 +39,38 @@ public class GameBoardImporter {
         }
     }
 
-    public void readGameBoard(Reader r) throws IOException  {
+    public void readGameBoard(Reader r) throws IOException, PatternFormatException {
         BufferedReader file = new BufferedReader(r);
 
         String line;
         StringBuilder patternString = new StringBuilder();
         String parameters = "";
         List<String> comments = new ArrayList<String>();
+        int paramLineCounter = 0;
+
         while ((line = file.readLine()) != null) {
-            if (line.matches("(.*)[#](.*)")) {
+            if (line.matches("^[#](.*)$")) {
                 //This matches every comment line. Posd ibly adjust for #r later?
                 comments.add(line);
+            } else if (line.matches("^(.*)(x|y|rule)(.*)$")) {
+                //^(x=[0-9]+,y=[0-9]+(,rules=(([a-zA-Z][0-8]{1,9})|([bB][0-8]{1,9}\/[ac-zAC-Z][0-8]{1,9})|([ac-zAC-Z][0-8]{1,9}\/[bB][0-8]{1,9})))?$)
+                parameters = line.replaceAll("\\s","").toLowerCase();
+                System.out.println(parameters);
+                paramLineCounter++;
             } else if (line.matches("(.*)[\\$!b](.*)")) {
                 //This matches every pattern line - lines with a $ or ! in it.
                 patternString.append(line);
-            } else if (line.matches("(.*)[xy(rule)](.*)")) {
-                //Extract parameters. Should we put these values into a gameboard object immediately? Neh
-                parameters = line;
             } else {
                 System.out.println("Unknown line: "+line);
             }
         }
 
         file.close();
+        System.out.println(paramLineCounter);
+        System.out.println(parameters.matches("^(x=[0-9]+,y=[0-9]+(,rules=(([a-zA-Z][0-8]{1,9})|([bB][0-8]{1,9}\\/[ac-zAC-Z][0-8]{1,9})|([ac-zAC-Z][0-8]{1,9}\\/[bB][0-8]{1,9})))?$)"));
+        if(paramLineCounter != 1 || !(parameters.matches("^(x=[0-9]+,y=[0-9]+(,rules=(([a-zA-Z][0-8]{1,9})|([bB][0-8]{1,9}\\/[ac-zAC-Z][0-8]{1,9})|([ac-zAC-Z][0-8]{1,9}\\/[bB][0-8]{1,9})))?$)"))) {
+            throw new PatternFormatException("Invalid format in .RLE file!");
+        }
 
         if (!(parameters.equals(""))) {
             parseParameters(parameters);
@@ -78,7 +88,7 @@ public class GameBoardImporter {
     }
 
     public void parseParameters(String parameters) {
-        String[] param_arr = parameters.replaceAll("\\s","").split(",");
+        String[] param_arr = parameters.split(",");
 
         for (String parameter : param_arr) {
             String parameter_name = parameter.split("=")[0].toLowerCase();

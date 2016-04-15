@@ -14,7 +14,7 @@ public class Launch extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("view/GoL.fxml"));
 
         Scene scene = new Scene(root);
-        stage.setTitle("FXML Welcome");
+        stage.setTitle("Game of Life");
         stage.setScene(scene);
         stage.show();
     }

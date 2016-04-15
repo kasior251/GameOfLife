@@ -39,7 +39,7 @@
                 <Button fx:id="ResetButton" mnemonicParsing="false" onAction="#handleResetButton" text="Reset" />
                 <Button fx:id="NextGenButton" layoutX="535.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleStepButton" text="Next Generation" />
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Speed:" />
-                <Slider fx:id="SpeedSlider" blockIncrement="50.0" majorTickUnit="250.0" max="500.0" min="150.0" minorTickCount="25" onMouseDragged="#handleSpeedSlider" snapToTicks="true" value="300.0" />
+                <Slider fx:id="SpeedSlider" blockIncrement="1.0" majorTickUnit="1.0" max="35.0" min="1.0" minorTickCount="1" onMouseDragged="#handleSpeedSlider" snapToTicks="true" value="15.0" />
                 <Text layoutX="291.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zoom:" />
                 <Slider fx:id="ZoomSlider" blockIncrement="1.0" layoutX="403.0" layoutY="23.0" majorTickUnit="1.0" max="8.0" min="1.0" minorTickCount="1" onMouseDragged="#handleZoomSlider" value="1.0" />
                 <Text layoutX="447.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Generation:" />

@@ -13,9 +13,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import model.GameBoard;
-import model.PatternFormatException;
-import model.RuleSet;
+import model.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -142,14 +140,14 @@ public class GameOfLife implements Initializable {
                 }
             }
         } else {
-            this.dragX = (int) Math.floor(zoomOffsetX+event.getX()*zoom);
-            this.dragY = (int) Math.floor(zoomOffsetY+event.getY()*zoom);
+            this.dragX = (int) Math.floor(event.getX());
+            this.dragY = (int) Math.floor(event.getY());
         }
     }
 
     @FXML protected void handleGridDragEvent(MouseEvent event) {
-        int dragX = (int) Math.floor(zoomOffsetX+event.getX()*zoom);
-        int dragY = (int) Math.floor(zoomOffsetY+event.getY()*zoom);
+        int dragX = (int) Math.floor(event.getX());
+        int dragY = (int) Math.floor(event.getY());
 
         if (event.getButton() == MouseButton.PRIMARY) {
             int xPos = (int)Math.floor((zoomOffsetX * -1 + event.getX()) / zoom-canvasOffsetX)/cellSize;
@@ -174,10 +172,8 @@ public class GameOfLife implements Initializable {
                 BlurCanvas.getGraphicsContext2D().setTransform(zoom,0,0,zoom,canvasOffsetX*zoom+zoomOffsetX,canvasOffsetY*zoom+zoomOffsetY);
                 CellCanvas.getGraphicsContext2D().setTransform(zoom,0,0,zoom,canvasOffsetX*zoom+zoomOffsetX,canvasOffsetY*zoom+zoomOffsetY);
                 draw(CellCanvas.getGraphicsContext2D());
-            canvasOffsetX += ((dragX-this.dragX)/zoom)/zoom;
-            canvasOffsetY += ((dragY-this.dragY)/zoom)/zoom;
-            System.out.println(canvasOffsetX);
-            System.out.println(canvasOffsetY);
+            canvasOffsetX += (dragX-this.dragX)/zoom;
+            canvasOffsetY += (dragY-this.dragY)/zoom;
             this.dragX = dragX;
             this.dragY = dragY;
             //}
@@ -188,7 +184,7 @@ public class GameOfLife implements Initializable {
     @FXML protected void handleResetButton() {
         gameLoop.stop();
         isRunning = false;
-        StartStopButton.setText("▶");
+        StartStopButton.setText("\u23F5");
         generation = 0;
         GenCounter.setText(Integer.toString(generation));
 
@@ -202,6 +198,7 @@ public class GameOfLife implements Initializable {
 
     @FXML protected void handleToggleStartButton() {
         if (isRunning) {
+            //If we implement rewind: ⏮
             StartStopButton.setText("\u23F5");
             isRunning = false;
             gameLoop.stop();
@@ -217,20 +214,23 @@ public class GameOfLife implements Initializable {
             GameBoardImporter importer = new GameBoardImporter(SpeedSlider);
 
             if (importer.gameBoard != null) {
+                if (gameBoard.getRows() < importer.getRows() || gameBoard.getColumns() < importer.getColumns()) {
+                    throw new TooLargePatternException("The pattern is too large");
+                }
                 gameBoard.addBoard(importer.gameBoard);
-            } else {
-                System.out.println("Importer.gameboard = null: FileformatException?");
-            }
 
-            if (importer.ruleSet != null) {
-                rules = new RuleSet(importer.ruleSet);
+                if (importer.ruleSet != null) {
+                    rules = new RuleSet(importer.ruleSet);
+                }
             }
 
             draw(CellCanvas.getGraphicsContext2D());
         } catch (IOException e) {
-            System.out.println("IOException in instantiation of GameBoardImporter in GameOfLife");
-        } catch (PatternFormatException e) {
-            System.out.println(e.getMessage());
+            new ErrorMessage("IOException in instantiation of GameBoardImporter in GameOfLife");
+        } catch (PatternFormatException | TooLargePatternException e) {
+            new ErrorMessage(e.getMessage());
+        } catch (ArrayIndexOutOfBoundsException e) {
+            new ErrorMessage("X and/or Y in .rle file does not match actual pattern size");
         }
     }
 
@@ -252,7 +252,7 @@ public class GameOfLife implements Initializable {
         public void handle(long now) {
             long currentTimer = System.currentTimeMillis();
 
-            long tickLength = (long) ((speed*-1)+500);
+            long tickLength = (long)Math.floor(500/speed);
 
             if ((currentTimer - lastTimer) > tickLength) {
                 nextGeneration();

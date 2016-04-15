@@ -20,8 +20,9 @@ public class RuleSet {
         this.rules = rules;
     }
 
-    public boolean nextState(boolean state, int neighbours) {
-        return rules[(state) ? 1 : 0][neighbours];
+    public boolean nextState(boolean state, int neighbours)  {
+            return rules[(state) ? 1 : 0][neighbours];
+
     }
 
     public boolean[][] getRules() {

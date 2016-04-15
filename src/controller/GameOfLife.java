@@ -13,8 +13,10 @@ import javafx.scene.effect.GaussianBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import model.ErrorMessage;
 import model.GameBoard;
 import model.RuleSet;
+import model.TooLargePatternException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,7 +29,7 @@ public class GameOfLife implements Initializable {
     private boolean isRunning = false;
     private double speed;
     private int generation;
-    private int cellSize;
+    private int cellSize = 1;
     private double zoom = 1;
     private AnimationTimer gameLoop;
     private boolean dragVal;
@@ -44,11 +46,10 @@ public class GameOfLife implements Initializable {
     @FXML private Slider ZoomSlider;
     @FXML private MenuItem importerButton;
 
+
     public GameOfLife() {
         rules = new RuleSet();
         gameBoard = new GameBoard();
-        cellSize = 1;
-
         gameLoop = new AnimationTimer() {
             long lastTimer = System.currentTimeMillis();
 
@@ -89,26 +90,6 @@ public class GameOfLife implements Initializable {
     }
 
     public void nextGeneration() {
-//        if (generation == 47) {
-/*        if (generation == 100) {
-            rules.setRule(false, 6, true);
-            rules.setRule(false, 1, false);
-            rules.setRule(false, 2, false);
-        }*/
-
-/*        if ((generation % 20) < 15) {
-            //rules.setRule(false, 1, true);
-            //rules.setRule(true, 1, true);
-            rules.setRule(false, 2, true);
-            rules.setRule(false, 3, true);
-            rules.setRule(false, 6, true);
-        } else {
-            rules.setRule(false, 1, false);
-            //rules.setRule(true, 1, false);
-            rules.setRule(false, 2, false);
-            rules.setRule(false, 3, false);
-            rules.setRule(false, 6, false);
-        }*/
 
         generation++;
         GenCounter.setText(Integer.toString(generation));
@@ -116,18 +97,20 @@ public class GameOfLife implements Initializable {
         boolean[][] nextBoard = new boolean[gameBoard.getColumns()][gameBoard.getRows()];
         for (int i = 0; i < gameBoard.getColumns(); i++) {
             for (int j = 0; j < gameBoard.getRows(); j++) {
-                nextBoard[i][j] = rules.nextState(gameBoard.getCell(i,j), gameBoard.countNeighbours(i, j));
+                nextBoard[i][j] = rules.nextState(gameBoard.getCell(i, j), gameBoard.countNeighbours(i, j));
             }
         }
         gameBoard.setBoard(nextBoard);
         draw(CellCanvas.getGraphicsContext2D());
     }
 
+
+
+
+
+
     public void draw(GraphicsContext gc) {
-/*        if (generation == 200) {
-            BlurCanvas.getGraphicsContext2D().setFill(Color.WHITE);
-            CellCanvas.getGraphicsContext2D().setFill(Color.WHITE);
-        }*/
+
         gc.clearRect(0, 0, gameBoard.getColumns()*cellSize, gameBoard.getRows()*cellSize);
         BlurCanvas.getGraphicsContext2D().clearRect(0, 0, gameBoard.getColumns()*cellSize, gameBoard.getRows()*cellSize);
         for (int i = 0; i < gameBoard.getColumns(); i++) {
@@ -137,9 +120,6 @@ public class GameOfLife implements Initializable {
                     gc.fillRect(cellSize * i, cellSize * j, cellSize, cellSize);
                 }
 
-                /*gc.setStroke(Color.DARKGRAY);
-                gc.strokeRect(cellSize * i, cellSize * j, cellSize, cellSize);
-                gc.setStroke(Color.TRANSPARENT);*/
             }
         }
     }
@@ -186,7 +166,7 @@ public class GameOfLife implements Initializable {
         generation = 0;
         GenCounter.setText(Integer.toString(generation));
 
-        gameBoard = new GameBoard(2400,1200);
+        gameBoard = new GameBoard(1200, 600);
         draw(CellCanvas.getGraphicsContext2D());
     }
 
@@ -206,16 +186,35 @@ public class GameOfLife implements Initializable {
         }
     }
 
-    @FXML protected void handleImportFile() {
+    @FXML protected void handleImportFile() throws TooLargePatternException{
         try {
             GameBoardImporter importer = new GameBoardImporter(SpeedSlider);
-
+        if (importer.ruleSet != null) {
             rules = new RuleSet(importer.ruleSet);
+        }
+        if (importer.gameBoard != null) {
+            if (gameBoard.getRows() < importer.getRows() || gameBoard.getColumns() < importer.getColumns()) {
+                throw new TooLargePatternException();
+            }
             gameBoard.addBoard(importer.gameBoard);
+
+
+        }
+
             draw(CellCanvas.getGraphicsContext2D());
         } catch (IOException e) {
             System.out.println("IOException in instantiation of GameBoardImporter in GameOfLife");
         }
+        catch (NullPointerException e) {
+            //do nothing when no file is chosen
+        }
+        catch (TooLargePatternException e) {
+            ErrorMessage em = new ErrorMessage("Error", "The pattern is too large");
+            em.show();
+
+        }
+
+
     }
 
     @FXML protected void handleChangeRules() {
@@ -223,5 +222,9 @@ public class GameOfLife implements Initializable {
         ruleHandler.showAndWait();
 
         rules = new RuleSet(ruleHandler.rules);
+    }
+
+    @FXML protected void handleDefaultRules() {
+        rules = new RuleSet();
     }
 }

@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Arrays;
-
 public class GameBoard {
 
     private boolean[][] board;
@@ -9,7 +7,7 @@ public class GameBoard {
     private int rows;
 
     public GameBoard() {
-        this(2400, 1200);
+        this(1200, 600);
         int xOffset = 160;
         int yOffset = 130;
 

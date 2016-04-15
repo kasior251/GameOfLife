@@ -2,8 +2,9 @@ package controller;
 
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
-import model.GameBoard;
+import model.ErrorMessage;
 import model.RuleSet;
+import model.TooLargePatternException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -24,6 +25,15 @@ public class GameBoardImporter {
         readFromFile(node);
     }
 
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
+
+
     public void readFromFile(Node node) throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Gameboard pattern file (.rle, .sof)");
@@ -38,7 +48,7 @@ public class GameBoardImporter {
         }
     }
 
-    public void readGameBoard(Reader r) throws IOException  {
+    public void readGameBoard(Reader r) throws IOException {
         BufferedReader file = new BufferedReader(r);
         String line;
         StringBuilder patternString = new StringBuilder();
@@ -48,16 +58,21 @@ public class GameBoardImporter {
             if (line.matches("(.*)[#](.*)")) {
                 //This matches every comment line. Possibly adjust for #r later?
                 comments.add(line);
-            } else if (line.matches("(.*)[\\$!b](.*)")) {
-                //This matches every pattern line - lines with a $ or ! in it.
-                patternString.append(line);
             } else if (line.matches("(.*)[xy(rule)](.*)")) {
-                //Extract parameters. Should we put these values into a gameboard object immediately? Neh
+                //This matches every pattern line - lines with a $ or ! in it.
                 parameters = line;
+            } else if (line.matches("(.*)[\\$!b](.*)")) {
+                //Extract parameters. Should we put these values into a gameboard object immediately? Neh
+                patternString.append(line);
             } else {
                 System.out.println("Unknown line: "+line);
             }
+
+
+
         }
+        System.out.println(parameters);
+        System.out.println(patternString);
 
         file.close();
 
@@ -66,7 +81,19 @@ public class GameBoardImporter {
         }
 
         if (!(patternString.equals(""))) {
-            parsePattern(patternString);
+            try {
+                parsePattern(patternString);
+            }
+            catch (TooLargePatternException e) {
+                ErrorMessage em = new ErrorMessage("Error", "The pattern is too large");
+                gameBoard = null;
+                em.show();
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                ErrorMessage em = new ErrorMessage("Error", "The file is corrupted, the bounding box doesn't match the pattern size");
+                gameBoard = null;
+                em.show();
+            }
         }
 
 
@@ -103,13 +130,19 @@ public class GameBoardImporter {
                     }
                 }
 
-                //ruleSet = new RuleSet(rule_array); Best way?
-                ruleSet = rule_array;
+                ruleSet = new RuleSet(rule_array).getRules(); //Best way?
+
+                    //ruleSet = rule_array;
+
+
+
+
+
             }
         }
     }
 
-    public void parsePattern(StringBuilder patternSB) {
+    public void parsePattern(StringBuilder patternSB) throws TooLargePatternException,ArrayIndexOutOfBoundsException {
         String[] pattern = patternSB.toString().split("(?<=[^0-9])");
         gameBoard = new boolean[rows][columns];
         int y = 0;
@@ -123,23 +156,31 @@ public class GameBoardImporter {
             if (countStr.length() > 0) {
                 count = Integer.parseInt(countStr);
             }
+                for (int i = 0; i < count; i++) {
+                    if (token.equals("b")) {
 
-            for (int i = 0; i < count; i++) {
-                if (token.equals("b")) {
-                    gameBoardRow[x] = false;
-                    x++;
-                } else if (token.equals("$") || token.equals("!")) {
-                    gameBoard[y] = gameBoardRow;
-                    gameBoardRow = new boolean[columns];
-                    x = 0;
-                    y++;
-                } else {
-                    gameBoardRow[x] = true;
-                    x++;
+                        gameBoardRow[x] = false;
+                        x++;
+
+                    } else if (token.equals("$") || token.equals("!")) {
+                        gameBoard[y] = gameBoardRow;
+                        gameBoardRow = new boolean[columns];
+                        x = 0;
+                        y++;
+
+                    } else {
+                        gameBoardRow[x] = true;
+                        x++;
+                    }
+
                 }
-            }
+
+
+
+
 
         }
+
     }
 
     public boolean[][] getGameBoard() {

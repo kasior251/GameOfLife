@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameOfLife">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameOfLife">
     <children>
         <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
@@ -25,15 +25,13 @@
                 <Menu mnemonicParsing="false" text="Rules">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Reset to Default" />
-                        <MenuItem mnemonicParsing="false" onAction="#handleChangeRules" text="Customize Rules" />
+                        <MenuItem mnemonicParsing="false" text="Customize Rules" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
-        <Canvas fx:id="GridCanvas" height="600.0" onMouseDragged="#handleGridDragEvent" onMousePressed="#handleGridEvent" width="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
-      <Canvas fx:id="BlurCanvas" height="600.0" layoutX="10.0" layoutY="35.0" onMouseDragged="#handleGridDragEvent" onMousePressed="#handleGridEvent" width="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0" />
-      <Canvas fx:id="CellCanvas" height="600.0" layoutX="10.0" layoutY="35.0" onMouseDragged="#handleGridDragEvent" onMousePressed="#handleGridEvent" width="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0" />
-        <ButtonBar layoutX="50.0" layoutY="127.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0">
+        <Canvas fx:id="GridCanvas" height="535.0" onMouseDragged="#handleGridDragEvent" onMousePressed="#handleGridEvent" width="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
+        <ButtonBar layoutX="50.0" layoutY="127.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <buttons>
                 <Button fx:id="StartStopButton" mnemonicParsing="false" onAction="#handleToggleStartButton" text="▶" />
                 <Button fx:id="ResetButton" mnemonicParsing="false" onAction="#handleResetButton" text="Reset" />
@@ -41,7 +39,7 @@
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Speed:" />
                 <Slider fx:id="SpeedSlider" blockIncrement="50.0" majorTickUnit="250.0" max="500.0" min="150.0" minorTickCount="25" onMouseDragged="#handleSpeedSlider" snapToTicks="true" value="300.0" />
                 <Text layoutX="291.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zoom:" />
-                <Slider fx:id="ZoomSlider" blockIncrement="0.01" layoutX="403.0" layoutY="23.0" max="2.0" min="0.5" onMouseDragged="#handleZoomSlider" value="1.0" />
+                <Slider fx:id="ZoomSlider" layoutX="403.0" layoutY="23.0" />
                 <Text layoutX="447.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Generation:" />
                 <Text fx:id="GenCounter" layoutX="587.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="RIGHT" wrappingWidth="30.0" />
             </buttons>

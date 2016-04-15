@@ -15,6 +15,11 @@ public class GameBoardTest extends TestCase {
     }
 
     @org.junit.Test
+    public void testGetRows() throws Exception {
+
+    }
+
+    @org.junit.Test
     public void testGetColumns() throws Exception {
 
     }
@@ -25,10 +30,5 @@ public class GameBoardTest extends TestCase {
         gB = new GameBoard(3,3);
         gB.setBoard(array);
         assertEquals(4,gB.countNeighbours(1,1));
-    }
-
-    @org.junit.Test
-    public void testGetRows() throws Exception {
-
     }
 }
